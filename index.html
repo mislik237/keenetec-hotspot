@@ -27,7 +27,7 @@
         const urlParams = new URLSearchParams(window.location.search);
         
         // Адрес авторизации самого роутера (обычно http://192.168.2...)
-        const baseTarget = urlParams.get('sip') || urlParams.get('u_ip') || '192.168.2.1'; 
+        const baseTarget = urlParams.get('sip') || urlParams.get('u_ip') || '10.1.30.1'; 
         const originalRedirect = urlParams.get('redirect_url') || 'https://google.com';
         
         // Собираем ссылку для отправки роутеру сигнала "Авторизовать"
