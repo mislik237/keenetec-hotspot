@@ -2,25 +2,42 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <title>Авторизация в сети</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Вход в гостевую сеть</title>
     <style>
-        body { font-family: sans-serif; text-align: center; margin-top: 10%; background: #f4f4f9; }
-        .btn { padding: 10px 20px; background: #007bff; color: white; border: none; cursor: pointer; text-decoration: none; border-radius: 5px; }
+        body { font-family: -apple-system, sans-serif; background: #eceff1; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; }
+        .card { background: white; padding: 30px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); text-align: center; max-width: 360px; width: 90%; }
+        h2 { color: #1c3d5a; margin-bottom: 10px; }
+        p { color: #546e7a; font-size: 14px; margin-bottom: 25px; line-height: 1.4; }
+        .btn { display: inline-block; width: 100%; padding: 14px; background: #0087ff; color: white; border: none; border-radius: 8px; font-weight: bold; font-size: 16px; cursor: pointer; transition: background 0.2s; text-decoration: none; box-sizing: border-box; }
+        .btn:hover { background: #006cdb; }
     </style>
 </head>
 <body>
-    <h1>Добро пожаловать в сеть Keenetic!</h1>
-    <p>Для продолжения работы нажмите кнопку ниже:</p>
-    <button class="btn" id="connectBtn">Войти в интернет</button>
 
-    <script>
-        // Скрипт автоматического перенаправления, если Keenetic передал исходный URL
+<div class="card">
+    <h2>Бесплатный Wi-Fi</h2>
+    <p>Добро пожаловать! Для получения доступа к сети интернет, пожалуйста, нажмите кнопку ниже.</p>
+    <button class="btn" id="connectBtn">Подключиться</button>
+</div>
+
+<script>
+    document.getElementById('connectBtn').addEventListener('click', function() {
+        // 1. Получаем параметры, которые Keenetic передал в ссылку
         const urlParams = new URLSearchParams(window.location.search);
-        const redirectUrl = urlParams.get('redirect_url') || 'https://google.com';
+        
+        // Адрес авторизации самого роутера (обычно http://192.168.2...)
+        const baseTarget = urlParams.get('sip') || urlParams.get('u_ip') || '192.168.2.1'; 
+        const originalRedirect = urlParams.get('redirect_url') || 'https://google.com';
+        
+        // Собираем ссылку для отправки роутеру сигнала "Авторизовать"
+        // Keenetic ожидает отправку параметров обратно на свой внутренний веб-сервер
+        let routerUrl = `http://${baseTarget}:7990/ui/captive/?client_mac=${urlParams.get('client_mac')}&client_ip=${urlParams.get('client_ip')}&nas_id=${urlParams.get('nas_id')}&redirect_url=${encodeURIComponent(originalRedirect)}`;
+        
+        // Перенаправляем пользователя на роутер, роутер открывает интернет и кидает на исходный сайт
+        window.location.href = routerUrl;
+    });
+</script>
 
-        document.getElementById('connectBtn').addEventListener('click', () => {
-            window.location.href = redirectUrl;
-        });
-    </script>
 </body>
 </html>
