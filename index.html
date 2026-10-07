@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Авторизация в сети</title>
+    <style>
+        body { font-family: sans-serif; text-align: center; margin-top: 10%; background: #f4f4f9; }
+        .btn { padding: 10px 20px; background: #007bff; color: white; border: none; cursor: pointer; text-decoration: none; border-radius: 5px; }
+    </style>
+</head>
+<body>
+    <h1>Добро пожаловать в сеть Keenetic!</h1>
+    <p>Для продолжения работы нажмите кнопку ниже:</p>
+    <button class="btn" id="connectBtn">Войти в интернет</button>
+
+    <script>
+        // Скрипт автоматического перенаправления, если Keenetic передал исходный URL
+        const urlParams = new URLSearchParams(window.location.search);
+        const redirectUrl = urlParams.get('redirect_url') || 'https://google.com';
+
+        document.getElementById('connectBtn').addEventListener('click', () => {
+            window.location.href = redirectUrl;
+        });
+    </script>
+</body>
+</html>
